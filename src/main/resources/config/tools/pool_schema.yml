@@ -10,3 +10,6 @@ poolConfigs:
   - poolId: "workspace_manager_v6"
     size: 500
     resourceConfigName: "workspace_manager_v6"
+  - poolId: "datarepo_v1"
+    size: 300
+    resourceConfigName: "datarepo_v1"

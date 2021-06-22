@@ -1,0 +1,20 @@
+# Data Repo buffered workspace template
+---
+configName: "datarepo_v1"
+gcpProjectConfig:
+  projectIdSchema:
+    prefix: "datarepo-dev"
+    scheme: "RANDOM_CHAR"
+  parentFolderId: "270278425081" #data.test-terra.bio/repos/jade-dev
+  billingAccount: "01A82E-CA8A14-367457"
+  enabledApis:
+    - "bigquery-json.googleapis.com"
+    - "firestore.googleapis.com"
+    - "firebaserules.googleapis.com"
+    - "storage-component.googleapis.com"
+    - "storage-api.googleapis.com"
+    - "cloudbilling.googleapis.com"
+    - "appengine.googleapis.com"
+    - "compute.googleapis.com"
+  network:
+    enableNetworkMonitoring: "false"
