@@ -56,6 +56,11 @@ allprojects {
     }
 }
 
+apply plugin: "jacoco"
+jacoco {
+    toolVersion = '0.8.2'
+}
+
 repositories {
     if (useMavenLocal) {
         mavenLocal() // must be listed first to take effect
@@ -267,26 +272,13 @@ spotbugsTest {
     }
 }
 
-tasks.withType(JacocoReport) {
+jacocoTestReport {
     reports {
-        xml.enabled false
-        csv.enabled false
-        html.destination file("${buildDir}/jacocoHtml")
+        xml.enabled = true
+        xml.destination = file("$buildDir/reports/jacoco/test/jacoco.xml")
     }
+    dependsOn test
 }
-
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            limit {
-                counter = 'BRANCH'
-                value = 'COVEREDRATIO'
-                minimum = 0.1
-            }
-        }
-    }
-}
-check.dependsOn jacocoTestCoverageVerification
 
 // Testing config
 
