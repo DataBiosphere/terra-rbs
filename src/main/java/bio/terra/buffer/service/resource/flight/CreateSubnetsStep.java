@@ -46,35 +46,46 @@ import org.slf4j.LoggerFactory;
 public class CreateSubnetsStep implements Step {
   /**
    * All current Google Compute Engine regions with the default Ip ranges listed (and manually
-   * copied) in: https://cloud.google.com/vpc/docs/vpc#ip-ranges.
+   * copied) in: https://cloud.google.com/vpc/docs/vpc#ip-ranges. The subnet ranges were expanded
+   * from the default 4,096 IP addresses (/20) to 65,536 IP addresses (/16) per region.
+   *
+   * <p>One can expand the IP ranges later. FYI there is NOT an equivalent `shrink-ip-range`, only
+   * https://cloud.google.com/sdk/gcloud/reference/compute/networks/subnets/expand-ip-range
+   *
+   * <p>/16 currently gives each region its own unique two-octal subnet.
+   *
+   * <p>NOTE: As of 2021-06-30 the IP ranges here have drifted from the list in gcp-dm-templates.
+   * The two repositories contain a different set of regions, and the regions have been assigned
+   * different subnets.
+   * https://github.com/broadinstitute/gcp-dm-templates/blob/bf2ec422869d108670ea34f93db3e19d5d07b017/templates/network.py
    */
   @VisibleForTesting
   public static final Map<String, String> REGION_TO_IP_RANGE =
       ImmutableMap.<String, String>builder()
-          .put("asia-east1", "10.140.0.0/20")
-          .put("asia-east2", "10.170.0.0/20")
-          .put("asia-northeast1", "10.146.0.0/20")
-          .put("asia-northeast2", "10.174.0.0/20")
-          .put("asia-northeast3", "10.178.0.0/20")
-          .put("asia-south1", "10.160.0.0/20")
-          .put("asia-southeast1", "10.148.0.0/20")
-          .put("asia-southeast2", "10.184.0.0/20")
-          .put("australia-southeast1", "10.152.0.0/20")
-          .put("europe-north1", "10.166.0.0/20")
-          .put("europe-west1", "10.132.0.0/20")
-          .put("europe-west2", "10.154.0.0/20")
-          .put("europe-west3", "10.156.0.0/20")
-          .put("europe-west4", "10.164.0.0/20")
-          .put("europe-west6", "10.172.0.0/20")
-          .put("northamerica-northeast1", "10.162.0.0/20")
-          .put("southamerica-east1", "10.158.0.0/20")
-          .put("us-central1", "10.128.0.0/20")
-          .put("us-east1", "10.142.0.0/20")
-          .put("us-east4", "10.150.0.0/20")
-          .put("us-west1", "10.138.0.0/20")
-          .put("us-west2", "10.168.0.0/20")
-          .put("us-west3", "10.180.0.0/20")
-          .put("us-west4", "10.182.0.0/20")
+          .put("asia-east1", "10.140.0.0/16")
+          .put("asia-east2", "10.170.0.0/16")
+          .put("asia-northeast1", "10.146.0.0/16")
+          .put("asia-northeast2", "10.174.0.0/16")
+          .put("asia-northeast3", "10.178.0.0/16")
+          .put("asia-south1", "10.160.0.0/16")
+          .put("asia-southeast1", "10.148.0.0/16")
+          .put("asia-southeast2", "10.184.0.0/16")
+          .put("australia-southeast1", "10.152.0.0/16")
+          .put("europe-north1", "10.166.0.0/16")
+          .put("europe-west1", "10.132.0.0/16")
+          .put("europe-west2", "10.154.0.0/16")
+          .put("europe-west3", "10.156.0.0/16")
+          .put("europe-west4", "10.164.0.0/16")
+          .put("europe-west6", "10.172.0.0/16")
+          .put("northamerica-northeast1", "10.162.0.0/16")
+          .put("southamerica-east1", "10.158.0.0/16")
+          .put("us-central1", "10.128.0.0/16")
+          .put("us-east1", "10.142.0.0/16")
+          .put("us-east4", "10.150.0.0/16")
+          .put("us-west1", "10.138.0.0/16")
+          .put("us-west2", "10.168.0.0/16")
+          .put("us-west3", "10.180.0.0/16")
+          .put("us-west4", "10.182.0.0/16")
           .build();
 
   /**
